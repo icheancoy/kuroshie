@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ichsan Andrian — IT Infrastructure, Databases, Systems</title>
+<meta name="description" content="Ichsan Andrian. IT infrastructure, database administration, systems and data engineering. Ten years across Oracle and MySQL, Linux and Unix, VMware, enterprise storage, middleware and ETL.">
+<meta name="theme-color" content="#efeade">
+<meta property="og:title" content="Ichsan Andrian — IT Infrastructure, Databases, Systems">
+<meta property="og:description" content="Ten years running the layer under the applications: Oracle and MySQL, Linux and Unix servers, VMware, enterprise storage, middleware and ETL.">
+<meta property="og:type" content="profile">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2317150f'/%3E%3Cg fill='%23e2a32b'%3E%3Crect x='5' y='7' width='4' height='18'/%3E%3Crect x='12' y='19' width='6' height='6'/%3E%3Crect x='20' y='7' width='4' height='18'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<script>
+  try {
+    var t = localStorage.getItem('ia-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'phosphor');
+  } catch (e) {}
+</script>
+<style>
+  :root {
+    --paper: #efeade;
+    --paper-band: #e6e0cf;
+    --paper-edge: #dcd5c0;
+    --ink: #17150f;
+    --ink-soft: #4b473c;
+    --ink-faint: #7d776a;
+    --rule: rgba(23, 21, 15, 0.22);
+    --rule-hard: rgba(23, 21, 15, 0.55);
+    --accent: #c0392b;
+    --accent-2: #1f5f47;
+    --amber: #b07d12;
+    --shadow: none;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --pad: clamp(1.15rem, 3.2vw, 3.25rem);
+    --maxw: 1160px;
+  }
+  [data-theme="phosphor"] {
+    --paper: #14130f;
+    --paper-band: #1c1a14;
+    --paper-edge: #2a271d;
+    --ink: #ece2c4;
+    --ink-soft: #b6ac90;
+    --ink-faint: #8a8168;
+    --rule: rgba(236, 226, 196, 0.22);
+    --rule-hard: rgba(236, 226, 196, 0.5);
+    --accent: #ff8a3d;
+    --accent-2: #52d69a;
+    --amber: #ffc247;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.58;
+    text-wrap: pretty;
+    font-kerning: normal;
+  }
+
+  .sheet {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    background: var(--paper);
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+  }
+
+  @media (min-width: 1200px) {
+    .sheet { box-shadow: 0 1px 0 var(--rule); }
+  }
+
+  .edge {
+    height: 6px;
+    background:
+      linear-gradient(90deg,
+        var(--accent) 0 96px,
+        var(--ink) 96px 100%);
+  }
+
+  /* ---------- header ---------- */
+
+  header {
+    padding: var(--pad) var(--pad) .85rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .slug {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.6rem;
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-bottom: .85rem;
+  }
+  .slug b { font-weight: 500; color: var(--ink-soft); }
+  .slug .end { margin-left: auto; }
+
+  .ident {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .5rem 1.5rem;
+    align-items: end;
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 6.4vw, 3.9rem);
+    line-height: .98;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .ident-meta {
+    display: grid;
+    gap: .3rem;
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: right;
+    padding-bottom: .35rem;
+  }
+  .ident-meta span { display: block; }
+  .ident-meta .k { color: var(--ink-faint); }
+
+  .band {
+    margin-top: 1rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: clamp(.62rem, 1.9vw, .78rem);
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    padding: .6rem .8rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem .9rem;
+    justify-content: space-between;
+  }
+  .band em { font-style: normal; color: var(--amber); }
+  [data-theme="phosphor"] .band { background: var(--ink); color: #14130f; }
+
+  .contact-strip {
+    margin-top: .9rem;
+    font-family: var(--mono);
+    font-size: .76rem;
+    color: var(--ink-soft);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem 1.1rem;
+  }
+  .contact-strip a { color: var(--accent); }
+
+  /* ---------- layout ---------- */
+
+  .frame {
+    display: grid;
+    grid-template-columns: 208px minmax(0, 1fr);
+  }
+
+  .rail {
+    border-right: 1px dashed var(--rule-hard);
+    padding: 1.5rem 1.1rem 2rem;
+    font-family: var(--mono);
+    font-size: .72rem;
+    align-self: start;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .rail h2 {
+    margin: 0 0 .6rem;
+    font-size: .62rem;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .rail dl {
+    margin: 0 0 1.5rem;
+    display: grid;
+    gap: .5rem;
+  }
+  .rail dt {
+    font-size: .58rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .rail dd {
+    margin: 0;
+    font-size: .74rem;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  nav ol {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: .1rem;
+  }
+  nav a {
+    display: grid;
+    grid-template-columns: 1.9rem 1fr;
+    gap: .4rem;
+    padding: .3rem 0;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--rule);
+  }
+  nav a .n { color: var(--accent); }
+  nav a:hover, nav a:focus-visible { color: var(--ink); background: var(--paper-band); }
+  nav a[aria-current="true"] { color: var(--ink); }
+  nav a[aria-current="true"] .n { color: var(--accent-2); }
+
+  .toggle {
+    font: inherit;
+    font-size: .64rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid var(--rule-hard);
+    padding: .45rem .6rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .toggle:hover { border-color: var(--ink); color: var(--ink); }
+
+  main { padding: 0 var(--pad) 2.5rem; min-width: 0; }
+
+  section { padding-top: 2.1rem; scroll-margin-top: .5rem; }
+
+  .sec-h {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    margin: 0 0 1.05rem;
+    font-family: var(--mono);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+  }
+  .sec-h .n { color: var(--accent); }
+  .sec-h .t { white-space: nowrap; }
+  .sec-h .fill {
+    flex: 1;
+    border-bottom: 1px dotted var(--rule-hard);
+    transform: translateY(-.22em);
+  }
+  .sec-h .tag {
+    font-size: .6rem;
+    letter-spacing: .12em;
+    color: var(--ink-faint);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  p { margin: 0 0 .85rem; max-width: 68ch; }
+  .lede { font-size: 1.06rem; }
+  .lede strong { font-weight: 600; }
+
+  .muted { color: var(--ink-soft); }
+
+  /* ---------- spec table ---------- */
+
+  dl.spec { margin: 0; border-top: 1px solid var(--rule); }
+  dl.spec > div {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 0 1.4rem;
+    padding: .68rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  dl.spec dt {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    padding-top: .16rem;
+  }
+  [data-theme="phosphor"] dl.spec dt { color: var(--accent-2); }
+  dl.spec dd {
+    margin: 0;
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  /* ---------- log ---------- */
+
+  ol.log { margin: 0; padding: 0; list-style: none; }
+
+  ol.log > li {
+    display: grid;
+    grid-template-columns: 3.1rem minmax(0, 1fr);
+    border-top: 1px solid var(--rule);
+    padding: 1rem 0 .35rem;
+  }
+  ol.log > li:last-child { border-bottom: 1px solid var(--rule); }
+
+  .log-n {
+    font-family: var(--mono);
+    font-size: .7rem;
+    color: var(--accent);
+    letter-spacing: .06em;
+    padding-top: .3rem;
+  }
+
+  .log-body { min-width: 0; }
+
+  .log-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .35rem 1rem;
+    justify-content: space-between;
+  }
+  .log-role {
+    font-family: var(--mono);
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  .log-org {
+    font-family: var(--mono);
+    font-size: .74rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: .22rem 0 .5rem;
+  }
+  .log-when {
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  ul.dot { margin: 0 0 .8rem; padding: 0; list-style: none; }
+  ul.dot li {
+    position: relative;
+    padding-left: 1.15rem;
+    margin-bottom: .32rem;
+    font-size: .92rem;
+    max-width: 74ch;
+  }
+  ul.dot li::before {
+    content: "";
+    position: absolute;
+    left: .1rem;
+    top: .62em;
+    width: .38rem;
+    height: .12rem;
+    background: var(--accent-2);
+  }
+  [data-theme="phosphor"] ul.dot li::before { background: var(--accent-2); }
+
+  /* ---------- tables ---------- */
+
+  .tw { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+  }
+  caption {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: .64rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-bottom: .5rem;
+  }
+  th, td {
+    text-align: left;
+    vertical-align: top;
+    padding: .62rem .8rem .62rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  thead th {
+    font-family: var(--mono);
+    font-size: .62rem;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule-hard);
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(even) td { background: var(--paper-band); }
+  td.yr, th.yr {
+    font-family: var(--mono);
+    font-size: .74rem;
+    letter-spacing: .05em;
+    color: var(--accent);
+    white-space: nowrap;
+    width: 1%;
+  }
+  td.role-w, th.role-w {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    width: 1%;
+  }
+  .pid {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: .18rem;
+  }
+  .pname { font-weight: 600; }
+  td .dot-list { margin: .5rem 0 0; }
+
+  /* ---------- contact ---------- */
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.2rem 2rem;
+    border-top: 1px solid var(--rule-hard);
+    padding-top: 1.1rem;
+  }
+  .contact-grid h3 {
+    margin: 0 0 .3rem;
+    font-family: var(--mono);
+    font-size: .62rem;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .contact-grid p { margin: 0; font-size: .92rem; }
+  a { color: var(--accent); text-decoration-thickness: .06em; text-underline-offset: .18em; }
+  a:hover { color: var(--ink); }
+
+  footer {
+    margin-top: 2.4rem;
+    border-top: 1px solid var(--rule);
+    padding: 1rem var(--pad) 2rem;
+    font-family: var(--mono);
+    font-size: .66rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.4rem;
+    justify-content: space-between;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 860px) {
+    .frame { grid-template-columns: 1fr; }
+    .rail {
+      position: static;
+      max-height: none;
+      border-right: 0;
+      border-bottom: 1px dashed var(--rule-hard);
+      padding: 1.2rem var(--pad);
+    }
+    .rail dl { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .ident { grid-template-columns: 1fr; }
+    .ident-meta { text-align: left; }
+    dl.spec > div { grid-template-columns: 1fr; gap: .18rem; }
+    ol.log > li { grid-template-columns: 2.2rem minmax(0, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; }
+  }
+
+  @media (max-width: 560px) {
+    .rail dl { grid-template-columns: 1fr; }
+    .band { letter-spacing: .1em; }
+  }
+
+  @media print {
+    :root {
+      --paper: #fff;
+      --paper-band: #f2f2f2;
+      --ink: #000;
+      --ink-soft: #333;
+      --ink-faint: #555;
+      --rule: #bbb;
+      --rule-hard: #777;
+      --accent: #000;
+      --accent-2: #000;
+    }
+    .rail, .toggle, .edge { display: none; }
+    .frame { grid-template-columns: 1fr; }
+    .sheet { max-width: none; border: 0; }
+    main { padding: 0; }
+    header { padding: 0 0 .6rem; }
+    .band { background: #000 !important; color: #fff !important; }
+    section { padding-top: 1.1rem; break-inside: avoid; }
+    ol.log > li, dl.spec > div, tbody tr { break-inside: avoid; }
+    a { color: #000; text-decoration: none; }
+    footer { padding: 1rem 0 0; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="edge" aria-hidden="true"></div>
+
+  <header>
+    <div class="slug">
+      <span><b>Infrastructure</b> &middot; databases &middot; systems</span>
+      <span><b>Bojong Gede</b> West Java, Indonesia</span>
+      <span class="end"><b>Last updated</b> October 2026</span>
+    </div>
+
+    <div class="ident">
+      <h1>Ichsan<br>Andrian</h1>
+      <div class="ident-meta">
+        <span class="k">Working since</span>
+        <span>2014 &middot; 10+ years</span>
+        <span class="k">Reachable</span>
+        <span>Jakarta &amp; Bogor, on-site or hybrid</span>
+      </div>
+    </div>
+
+    <p class="band">
+      <span>IT Infrastructure <em>/</em> Database Administration <em>/</em> Systems &amp; Data Engineering</span>
+      <span>Oracle 11g/12c &middot; RHEL &middot; VMware &middot; Informatica</span>
+    </p>
+
+    <div class="contact-strip">
+      <a href="mailto:ichean92@gmail.com">ichean92@gmail.com</a>
+      <span>Jakarta &amp; Bogor area, Indonesia</span>
+    </div>
+  </header>
+
+  <div class="frame">
+    <aside class="rail">
+      <h2>On this page</h2>
+      <nav aria-label="Sections">
+        <ol>
+          <li><a href="#profile"><span class="n">01</span><span>Profile</span></a></li>
+          <li><a href="#capabilities"><span class="n">02</span><span>Capabilities</span></a></li>
+          <li><a href="#experience"><span class="n">03</span><span>Experience</span></a></li>
+          <li><a href="#projects"><span class="n">04</span><span>Selected projects</span></a></li>
+          <li><a href="#training"><span class="n">05</span><span>Training</span></a></li>
+          <li><a href="#education"><span class="n">06</span><span>Education</span></a></li>
+          <li><a href="#contact"><span class="n">07</span><span>Contact</span></a></li>
+        </ol>
+      </nav>
+
+      <h2>At a glance</h2>
+      <dl>
+        <div>
+          <dt>Experience</dt>
+          <dd>10+ years in production infrastructure</dd>
+        </div>
+        <div>
+          <dt>Databases</dt>
+          <dd>Oracle 11g/12c, MySQL, TigerGraph</dd>
+        </div>
+        <div>
+          <dt>Platforms</dt>
+          <dd>RHEL, CentOS, Ubuntu, Solaris, VMware ESXi</dd>
+        </div>
+        <div>
+          <dt>Sectors</dt>
+          <dd>Banking, government, manufacturing, logistics, telco</dd>
+        </div>
+        <div>
+          <dt>CV</dt>
+          <dd><a href="assets/CV_IchsanAndrian.pdf">Download PDF</a></dd>
+        </div>
+      </dl>
+
+      <button class="toggle" id="theme-toggle" type="button" aria-live="polite">Theme: paper</button>
+    </aside>
+
+    <main>
+      <section id="profile">
+        <h2 class="sec-h"><span class="n">&sect;01</span><span class="t">Profile</span><span class="fill"></span></h2>
+        <p class="lede">I run the layer under the applications. Ten years of Oracle and MySQL databases, Linux and Unix servers, VMware virtualization, enterprise storage, and the middleware and ETL pipelines that sit on top.</p>
+        <p>Day to day that means sizing server and storage infrastructure against what the application and database actually need, then carrying it through installation, migration, upgrade, and tuning until it is stable enough to hand to the operations team.</p>
+        <p class="muted">I have led teams of system administrators and database specialists, written the technical proposals behind projects we won, and spent plenty of time on the unglamorous half: preventive and corrective maintenance, incident troubleshooting, RCA, firmware and patching, and the documentation that lets the next person pick a system up without calling me first.</p>
+      </section>
+
+      <section id="capabilities">
+        <h2 class="sec-h"><span class="n">&sect;02</span><span class="t">Capabilities</span><span class="fill"></span></h2>
+        <dl class="spec">
+          <div>
+            <dt>Database administration</dt>
+            <dd>Oracle 11g/12c, Oracle Spatial, MySQL, RMAN, Data Pump, database migration, backup and recovery</dd>
+          </div>
+          <div>
+            <dt>Systems administration</dt>
+            <dd>RHEL, CentOS, Ubuntu, Solaris, Windows Server, OS hardening, kernel and resource tuning</dd>
+          </div>
+          <div>
+            <dt>Virtualization &amp; containers</dt>
+            <dd>VMware ESXi/vCenter, Oracle VM, Docker Engine, Docker Swarm, Red Hat OpenShift</dd>
+          </div>
+          <div>
+            <dt>Data engineering &amp; middleware</dt>
+            <dd>Informatica Server/DEI, ETL workflows, data pipelines, Oracle WebLogic, MDM environments, TigerGraph</dd>
+          </div>
+          <div>
+            <dt>Servers &amp; storage</dt>
+            <dd>HPE ProLiant, Dell PowerEdge/PowerVault, Lenovo ThinkSystem/Storage, Oracle, Cisco UCS, Supermicro, enterprise storage, RAID, SAN, Eaton UPS</dd>
+          </div>
+          <div>
+            <dt>Project delivery</dt>
+            <dd>Solution architecture, technical proposals, project planning, UAT, risk and rollback planning, documentation, BAST and customer handover</dd>
+          </div>
+          <div>
+            <dt>Operations</dt>
+            <dd>Preventive and corrective maintenance, incident troubleshooting, RCA, firmware and patching, performance monitoring</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="experience">
+        <h2 class="sec-h"><span class="n">&sect;03</span><span class="t">Experience</span><span class="fill"></span></h2>
+        <ol class="log">
+          <li>
+            <span class="log-n">01</span>
+            <div class="log-body">
+              <div class="log-top">
+                <span class="log-role">Infrastructure Project Engineer</span>
+                <span class="log-when">2025 &ndash; Present</span>
+              </div>
+              <div class="log-org">Yasatech Sinergi Inspirasi</div>
+              <ul class="dot">
+                <li>Design server and storage infrastructure aligned with application and database requirements, with focus on performance, scalability, and reliability.</li>
+                <li>Monitor project execution, scope, schedule, delivery logistics, documentation, UAT, and formal customer handover/BAST.</li>
+                <li>Prepare technical designs, implementation reports, and operational handover documentation.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="log-n">02</span>
+            <div class="log-body">
+              <div class="log-top">
+                <span class="log-role">Customer Success Team</span>
+                <span class="log-when">2025</span>
+              </div>
+              <div class="log-org">Kokusai Denshin Denwa Indonesia</div>
+              <ul class="dot">
+                <li>Cleaned up the patching backlog: ESXi upgrades on Dell PowerEdge and HPE ProLiant hosts, hardware swaps, and the post-change validation.</li>
+                <li>Ran health and performance checks on the server fleet and wrote up what needed replacing.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="log-n">03</span>
+            <div class="log-body">
+              <div class="log-top">
+                <span class="log-role">Leader of Data Enterprise</span>
+                <span class="log-when">2025</span>
+              </div>
+              <div class="log-org">Trinet Prima Solusi</div>
+              <ul class="dot">
+                <li>Ran proof-of-concept and delivery work with two system administrators and two database specialists reporting in.</li>
+                <li>Wrote the tender proposals and cost estimates for deals we won, then owned the implementation schedule.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="log-n">04</span>
+            <div class="log-body">
+              <div class="log-top">
+                <span class="log-role">Leader of Data Enterprise</span>
+                <span class="log-when">2019 &ndash; 2025</span>
+              </div>
+              <div class="log-org">Prima Integrasi Network</div>
+              <ul class="dot">
+                <li>Six years leading the data team: solution design, proof of concept, architecture, and the day-to-day work of getting it installed.</li>
+                <li>Held the technical relationship with clients across banking, government, and energy accounts.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="log-n">05</span>
+            <div class="log-body">
+              <div class="log-top">
+                <span class="log-role">System Administrator</span>
+                <span class="log-when">2019</span>
+              </div>
+              <div class="log-org">All Data International</div>
+              <ul class="dot">
+                <li>Managed server and storage setup, including data-center hardware installation, operating-system deployment, and VMware virtualization installation.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="log-n">06</span>
+            <div class="log-body">
+              <div class="log-top">
+                <span class="log-role">Database Administrator</span>
+                <span class="log-when">2015 &ndash; 2019</span>
+              </div>
+              <div class="log-org">Prima Integrasi Network</div>
+              <ul class="dot">
+                <li>Installed and configured operating systems and databases, and performed database migration, backup, and restore activities.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <span class="log-n">07</span>
+            <div class="log-body">
+              <div class="log-top">
+                <span class="log-role">IT Administrator</span>
+                <span class="log-when">2014 &ndash; 2015</span>
+              </div>
+              <div class="log-org">Asuransi Bumiputera</div>
+              <ul class="dot">
+                <li>Managed insurance policy data entry and storage in the Bumiputera application and MySQL database.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section id="projects">
+        <h2 class="sec-h"><span class="n">&sect;04</span><span class="t">Selected projects</span><span class="fill"></span></h2>
+        <div class="tw">
+          <table>
+            <caption>Client work, 2016 &ndash; 2025</caption>
+            <thead>
+              <tr>
+                <th class="yr" scope="col">Year</th>
+                <th scope="col">Engagement</th>
+                <th class="role-w" scope="col">Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="yr">2025</td>
+                <td>
+                  <span class="pid">PRJ-01 &middot; Government</span>
+                  <span class="pname">Integrated Control System, Ministry of Coordinating Affairs</span>
+                  <ul class="dot dot-list">
+                    <li>Designed the integrated system architecture: hardware sizing, network topology, redundancy, and supporting infrastructure.</li>
+                    <li>Led customer technical presentations, project kickoff, schedule control, installation and configuration, testing, and handover.</li>
+                    <li>Installed and configured HPE ProLiant DL380 Gen12, Eaton 9PX 5KVA UPS, and Dell PowerVault ME5224 storage, including RAID, provisioning, host mapping, and validation.</li>
+                  </ul>
+                </td>
+                <td class="role-w">Project manager &amp; technical solution</td>
+              </tr>
+              <tr>
+                <td class="yr">2025</td>
+                <td>
+                  <span class="pid">PRJ-02 &middot; Manufacturing</span>
+                  <span class="pname">Yamaha Indonesia Motor Manufacturing &mdash; server maintenance</span>
+                  <ul class="dot dot-list">
+                    <li>Prepared infrastructure health and performance reports.</li>
+                    <li>Executed VMware ESXi upgrades, hardware diagnostics and replacement, validation, and documentation.</li>
+                  </ul>
+                </td>
+                <td class="role-w">Server engineer</td>
+              </tr>
+              <tr>
+                <td class="yr">2025</td>
+                <td>
+                  <span class="pid">PRJ-03 &middot; Air cargo logistics</span>
+                  <span class="pname">Enterprise infrastructure support, Japanese airline cargo environment</span>
+                  <ul class="dot dot-list">
+                    <li>Performed preventive and corrective maintenance on Dell PowerEdge servers and troubleshooting across the server and virtualization layers.</li>
+                    <li>Hardware replacement, monitoring, scheduling, RCA, and operational handover.</li>
+                  </ul>
+                </td>
+                <td class="role-w">Server engineer</td>
+              </tr>
+              <tr>
+                <td class="yr">2023&ndash;24</td>
+                <td>
+                  <span class="pid">PRJ-04 &middot; Banking</span>
+                  <span class="pname">Bank Rakyat Indonesia &mdash; TigerGraph database for AML</span>
+                  <ul class="dot dot-list">
+                    <li>Installed and configured Ubuntu 20, TigerGraph Database, Docker Engine, and Docker Swarm; performed upgrades, optimization, monthly maintenance, and reporting.</li>
+                  </ul>
+                </td>
+                <td class="role-w">Leader, data enterprise</td>
+              </tr>
+              <tr>
+                <td class="yr">2023&ndash;24</td>
+                <td>
+                  <span class="pid">PRJ-05 &middot; Government</span>
+                  <span class="pname">BKKBN &mdash; ETL platform</span>
+                  <ul class="dot dot-list">
+                    <li>Installed and configured Ubuntu 20, TigerGraph Database, and a Docker Swarm environment; performed upgrades, maintenance, and reporting.</li>
+                  </ul>
+                </td>
+                <td class="role-w">Leader, data enterprise</td>
+              </tr>
+              <tr>
+                <td class="yr">2020&ndash;24</td>
+                <td>
+                  <span class="pid">PRJ-06 &middot; Government</span>
+                  <span class="pname">Jakarta Smart City &mdash; data engineering transformation</span>
+                  <ul class="dot dot-list">
+                    <li>Installed and optimized RHEL 7.4 and Informatica Server 10.2.0 Hotfix1.</li>
+                    <li>Troubleshooting, ETL performance tuning, upgrade to Informatica 10.4, maintenance, and reporting.</li>
+                  </ul>
+                </td>
+                <td class="role-w">Leader, data enterprise</td>
+              </tr>
+              <tr>
+                <td class="yr">2019</td>
+                <td>
+                  <span class="pid">PRJ-07 &middot; Energy</span>
+                  <span class="pname">Perusahaan Gas Negara &mdash; enterprise ETL re-engineering</span>
+                  <ul class="dot dot-list">
+                    <li>Implemented RHEL 7.1/7.2 and Informatica Server 10.2.0 Hotfix1.</li>
+                    <li>Tuning, troubleshooting, log analysis, connectivity and stability resolution, and maintenance.</li>
+                  </ul>
+                </td>
+                <td class="role-w">System administrator</td>
+              </tr>
+              <tr>
+                <td class="yr">2019</td>
+                <td>
+                  <span class="pid">PRJ-08 &middot; Enterprise</span>
+                  <span class="pname">Corporate application virtualization</span>
+                  <ul class="dot dot-list">
+                    <li>Installed Lenovo ThinkSystem SR530, Lenovo Storage V3700 V2, VMware 6/vCenter 6, SAN switch zoning, and RHEL 7.1.</li>
+                  </ul>
+                </td>
+                <td class="role-w">System administrator</td>
+              </tr>
+              <tr>
+                <td class="yr">2018</td>
+                <td>
+                  <span class="pid">PRJ-09 &middot; Enterprise</span>
+                  <span class="pname">New data center and disaster recovery center, Jalur Eka Nugraha</span>
+                  <ul class="dot dot-list">
+                    <li>Installed and configured Cisco UCS-240-M4, RHEL 6.7, MapR cluster, and NFS storage integration.</li>
+                    <li>Performed RAID card and mainboard replacement.</li>
+                  </ul>
+                </td>
+                <td class="role-w">System administrator</td>
+              </tr>
+              <tr>
+                <td class="yr">2016&ndash;18</td>
+                <td>
+                  <span class="pid">PRJ-10 &middot; Multi-client</span>
+                  <span class="pname">Oracle database and infrastructure projects</span>
+                  <ul class="dot dot-list">
+                    <li>Delivered Oracle 11g/12c installations and migrations across RHEL, Oracle Linux, and Solaris environments.</li>
+                    <li>Implemented Oracle Spatial, Oracle VM, SAN infrastructure, and Oracle Fusion Middleware Identity Management.</li>
+                  </ul>
+                </td>
+                <td class="role-w">Database administrator</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="training">
+        <h2 class="sec-h"><span class="n">&sect;05</span><span class="t">Training</span><span class="fill"></span></h2>
+        <div class="tw">
+          <table>
+            <caption>Courses and certifications completed</caption>
+            <thead>
+              <tr>
+                <th class="yr" scope="col">Year</th>
+                <th scope="col">Course</th>
+                <th class="role-w" scope="col">Provider</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="yr">2014</td><td>Oracle Database Administrator 10</td><td class="role-w">LPK Gunadarma</td></tr>
+              <tr><td class="yr">2015</td><td>Oracle Database Administrator 12c</td><td class="role-w">Oracle University</td></tr>
+              <tr><td class="yr">2015</td><td>Oracle Spatial 12c</td><td class="role-w">Oracle University</td></tr>
+              <tr><td class="yr">2017</td><td>Introduction to MapR</td><td class="role-w">MapR Institute</td></tr>
+              <tr><td class="yr">2019</td><td>SysAdmin Informatica Big Data</td><td class="role-w">Informatica University</td></tr>
+              <tr><td class="yr">2012</td><td>Building Internet Server with Linux System</td><td class="role-w">LPK Gunadarma</td></tr>
+              <tr><td class="yr">2012</td><td>Introduction to XML</td><td class="role-w">LPK Gunadarma</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="education">
+        <h2 class="sec-h"><span class="n">&sect;06</span><span class="t">Education</span><span class="fill"></span></h2>
+        <dl class="spec">
+          <div>
+            <dt>Degree</dt>
+            <dd>Bachelor of Informatics Engineering</dd>
+          </div>
+          <div>
+            <dt>Institution</dt>
+            <dd>Gunadarma University</dd>
+          </div>
+          <div>
+            <dt>Years</dt>
+            <dd>2009 &ndash; 2013</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="contact">
+        <h2 class="sec-h"><span class="n">&sect;07</span><span class="t">Contact</span><span class="fill"></span></h2>
+        <div class="contact-grid">
+          <div>
+            <h3>Email</h3>
+            <p><a href="mailto:ichean92@gmail.com">ichean92@gmail.com</a></p>
+          </div>
+          <div>
+            <h3>Location</h3>
+            <p>Bojong Gede, West Java, Indonesia</p>
+          </div>
+          <div>
+            <h3>Open to</h3>
+            <p>Jakarta and Bogor. Infrastructure, database, and platform engineering roles.</p>
+          </div>
+          <div>
+            <h3>Document</h3>
+            <p><a href="assets/CV_IchsanAndrian.pdf">CV in PDF</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span>Ichsan Andrian &middot; Bojong Gede, West Java</span>
+    <span>ichean92@gmail.com</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+
+  function label() {
+    var t = root.getAttribute('data-theme');
+    btn.textContent = 'Theme: ' + (t === 'phosphor' ? 'phosphor' : 'paper');
+    btn.setAttribute('aria-label', 'Switch theme. Currently ' + t + '.');
+  }
+
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'phosphor' ? 'paper' : 'phosphor';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('ia-theme', next); } catch (e) {}
+    label();
+  });
+
+  label();
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        links.forEach(function (a) {
+          a.setAttribute('aria-current', a.getAttribute('href') === '#' + entry.target.id ? 'true' : 'false');
+        });
+      });
+    }, { rootMargin: '-15% 0px -70% 0px' });
+    sections.forEach(function (s) { if (s) io.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
